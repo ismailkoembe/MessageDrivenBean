@@ -2,6 +2,7 @@ package de.pizza.dao;
 
 
 import de.pizza.model.Ordered;
+import de.pizza.model.Selection;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +23,12 @@ public class DaoOrder implements Serializable {
     private EntityManagerFactory emf;
 
 //    @Transactional 
-    public void storeOrder(Ordered o) {
+    public int storeOrder(Ordered o) {
 
         EntityManager em = emf.createEntityManager();
         em.persist(o);
         em.flush();
-
+        return o.getOrder_Id();
     }
 
     public List<Ordered> getOrdersList() {
@@ -39,4 +40,17 @@ public class DaoOrder implements Serializable {
         return orders;
     }
 
+    
+    public int storeSelection(Selection slc) {
+
+        EntityManager em = emf.createEntityManager();
+        em.persist(slc);
+        em.flush();
+        return slc.getSelectionId();
+    }
+    
+    
+    
+    
+    
 }

@@ -1,9 +1,6 @@
 package de.pizza.dao;
 
-import de.pizza.model.Customer;
-import de.pizza.model.Ordered;
 import de.pizza.model.Pizza;
-import de.pizza.model.Selection;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

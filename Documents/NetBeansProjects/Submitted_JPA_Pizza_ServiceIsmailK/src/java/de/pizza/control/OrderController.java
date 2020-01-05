@@ -10,6 +10,7 @@ import de.pizza.dao.DaoOrder;
 import de.pizza.model.Customer;
 import de.pizza.model.Ordered;
 import de.pizza.model.Pizza;
+import de.pizza.model.Selection;
 import de.pizza.model.SessionInfo;
 import java.io.IOException;
 import java.io.Serializable;
@@ -42,9 +43,10 @@ public class OrderController implements Serializable {
     private Date date;
     private double summ;
     private Ordered orders;
+    private Selection slc;
     private boolean check;
-    
-   @Inject
+
+    @Inject
     private MenuController menu;
     @Inject
     private DaoCustomer daoCustomer;
@@ -57,7 +59,8 @@ public class OrderController implements Serializable {
         sessionInfo = new SessionInfo();
         locale = new Locale("de");
         this.orders = new Ordered();
-        check=false;
+        this.slc = new Selection();
+        check = false;
     }
 
     public boolean isCheck() {
@@ -67,7 +70,6 @@ public class OrderController implements Serializable {
     public void setCheck(boolean check) {
         this.check = check;
     }
-
 
     public List<Pizza> getSelectionPizzas() {
         return selectionPizzas;
@@ -149,25 +151,27 @@ public class OrderController implements Serializable {
         this.daoOrder = daoOrder;
     }
 
-
-
-   
-
-    
-    
-    //----------------------------------------------my methods
-    public String resetSession(){
-        orders=new Ordered();
-        check=false;
-        return "start";
+    public Selection getSlc() {
+        return slc;
     }
-    
+
+    public void setSlc(Selection slc) {
+        this.slc = slc;
+    }
+
+    //----------------------------------------------my methods
+    public String resetSession() {
+        orders = new Ordered();
+        check = false;
+        return "/index.xhtml";
+    }
+
     public String addElements() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         sessionInfo.setIpAdress(request.getRemoteAddr());
         sessionInfo.setSessId(request.getSession().getId());
         for (Pizza p : menu.getMenu()) {
-            if (p.getNumber()> 0) {
+            if (p.getNumber() > 0) {
                 selectionPizzas.add(p);
             }
         }
@@ -177,35 +181,15 @@ public class OrderController implements Serializable {
         orders.setSess_Id(sessionInfo.getSessId());
         return "orderConfirm.xhtml";
     }
-    
-    /*
-    /**
- * Over order object this method produce an ArrayList. 
- * This list represent selection or order.
- * After method, browser goes order confirmation page.
- *//*
-    public String fillSelection() {
-        List<Pizza> tempSlcPizzas=new ArrayList<>();
-        for (Pizza p : ordered.getSelection()) {
-            System.out.println("Selection::"+p.getNumber());
-            if(p.getNumber()>0){
-                tempSlcPizzas.add(p);
-            }
-        }
-        ordered.getSelection().clear();
-        ordered.setSelection(tempSlcPizzas);
-        daoBean.storeOrder(tempSlcPizzas);
-        return "orderConfirm.xhtml";
-    }*/
-    
-     public void store(){
-       
-//            ordered.setSess_Id(callRequest().getSession().getId());
-//            Date currentDateTime = new Date();
-//            ordered.setOrderDate(currentDateTime);
-            check=true;
-//            daoBean.storeCustomer(current);
-            
+
+    public void store() {
+
+//            orders.setSess_Id(callRequest().getSession().getId());
+        Date currentDateTime = new Date();
+        orders.setOrderDate(currentDateTime);
+        check = true;
+        daoCustomer.storeCustomer(customer);
+
     }
 
     public void addElement(String pType, double price, int number) {
@@ -213,10 +197,11 @@ public class OrderController implements Serializable {
     }
 
     public double calcPrice() {
-        summ = 0.0;
+    
         for (Pizza p : this.getSelectionPizzas()) {
-            summ += (p.getNumber()* p.getPrice());
+            summ += (p.getNumber() * p.getPrice());
         }
+        System.out.println("sum ::" + summ);
         return summ;
     }
 
@@ -236,12 +221,11 @@ public class OrderController implements Serializable {
     }
 
     public String saveOrders() {
-        
         daoCustomer.storeCustomer(customer);
         daoOrder.storeOrder(orders);
+        daoOrder.storeSelection(slc);
         return "customer.xhtml";
     }
-
 
     public void creatpdf() {
 
@@ -253,21 +237,15 @@ public class OrderController implements Serializable {
 
         }
     }
-    
-    
-   /* public String calcPrice(){
-        String s= String.valueOf(ordered.totalPrice(ordered));
-        return s;
-    }*/
 
-    
     /**
-     * This method is trigerred by ordercormirmation page's button.
-     * It sends selection object to daoBean storeorder() method
+     * This method is trigerred by ordercormirmation page's button. It sends
+     * selection object to daoBean storeorder() method
+     *
      * @return browser goes to customer.xhtml page
      */
-    public String storeSelection(){
-       // daoBean.storeOrder(selection);
+    public String storeSelection() {
+
         return "customer.xhtml";
     }
 

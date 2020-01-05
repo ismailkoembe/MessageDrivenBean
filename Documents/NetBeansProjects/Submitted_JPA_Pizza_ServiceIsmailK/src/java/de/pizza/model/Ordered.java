@@ -5,16 +5,16 @@
  */
 package de.pizza.model;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -22,31 +22,29 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Trainer
+ * @author ikoembe
  */
 @Entity
 @Table(name = "ordered")
 @NamedQueries({
     @NamedQuery(name = "Ordered.SelectAll", query = "SELECT o FROM Ordered o")})
 public class Ordered implements Serializable {
-    
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int order_Id;
     @Temporal(TemporalType.TIMESTAMP)
     private Date orderDate;
     @OneToOne
     private Customer customer;
-    @OneToMany
+    @OneToOne
     private List<Pizza> selection;
     private String sess_Id;
-   
-   
 
     public Ordered() {
-        customer =new Customer();
-        selection=new ArrayList<>();
-       
-        
+        customer = new Customer();
+        selection = new ArrayList<>();
+
     }
 
     public Date getOrderDate() {
@@ -56,7 +54,7 @@ public class Ordered implements Serializable {
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
-    
+
     public int getOrder_Id() {
         return order_Id;
     }
@@ -81,7 +79,6 @@ public class Ordered implements Serializable {
         this.selection = selection;
     }
 
-
     public String getSess_Id() {
         return sess_Id;
     }
@@ -94,20 +91,22 @@ public class Ordered implements Serializable {
     public String toString() {
         return "Ordered{" + "order_Id=" + order_Id + ", orderDate=" + orderDate + ", customer=" + customer + ", selection=" + selection + ", sess_Id=" + sess_Id + '}';
     }
- 
-    
-    
+
     //-----------------------------my Methods
-    public double totalPrice(Ordered  order){
-        
-        double price=0.0;
-        
+    
+    /**
+     This method will be used for PizzaRechnungServlet.
+     */
+    public double totalPrice(Ordered order) {
+
+        double price = 0.0;
+
         for (Pizza tmpSlcPricePizza : order.getSelection()) {
 
-                    price += Double.valueOf(tmpSlcPricePizza.getPrice())*tmpSlcPricePizza.getNumber();
-                }
-        
-        
+            price += Double.valueOf(tmpSlcPricePizza.getPrice()) * tmpSlcPricePizza.getNumber();
+        }
+        System.out.println("calisiyorum");
+
         return price;
     }
 
