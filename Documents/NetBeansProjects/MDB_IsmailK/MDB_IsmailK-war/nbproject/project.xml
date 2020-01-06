@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.web.project</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/web-project/3">
+            <name>MDB_IsmailK-war</name>
+            <minimum-ant-version>1.6.5</minimum-ant-version>
+            <explicit-platform explicit-source-supported="true"/>
+            <web-module-libraries>
+                <library dirs="100">
+                    <file>${reference.MDB_IsmailK-ejb.dist}</file>
+                </library>
+                <library dirs="200">
+                    <file>${libs.iText_5.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${libs.Prime_Faces_7.0.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${libs.javaee-api-7.0.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${reference.MDB_IsmailK-lib.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+            </web-module-libraries>
+            <web-module-additional-libraries/>
+            <source-roots>
+                <root id="src.dir"/>
+            </source-roots>
+            <test-roots>
+                <root id="test.src.dir"/>
+            </test-roots>
+        </data>
+        <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
+            <reference>
+                <foreign-project>MDB_IsmailK-ejb</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>dist</target>
+                <clean-target>clean</clean-target>
+                <id>dist</id>
+            </reference>
+            <reference>
+                <foreign-project>MDB_IsmailK-lib</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+        </references>
+    </configuration>
+</project>
